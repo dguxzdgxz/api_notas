@@ -1,0 +1,39 @@
+cd api_notas
+.\venv\Scripts\Activate.ps1
+python manage.py runserver
+
+
+{
+  "username": "juan",
+  "password": "12345678"
+}
+
+http://127.0.0.1:8000/api/notas/
+
+POST /api/register/
+
+POST /api/token/
+
+POST /api/token/refresh/
+
+GET /api/notas/
+
+POST /api/notas/
+
+GET /api/notas/id/
+
+PUT /api/notas/id/
+
+DELETE /api/notas/id/
+
+GET /api/notas/?buscar=texto
+
+GET /api/notas/estadisticas/
+
+
+
+
+{
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc4OTg1ODc1OSwiaWF0IjoxNzg5MjUzOTU5LCJqdGkiOiI5ZTUzNDJjMDNkNjg0NWY5OGMxNDU1M2RkYzNiZjY5ZCIsInVzZXJfaWQiOiIzIn0.tjqZG6CY1PgrIq6ObnQfet3mXgR6Nnd_CbM3ktxobNw",
+  "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg5MzQwMzU5LCJpYXQiOjE3ODkyNTM5NTksImp0aSI6IjZmMjBiOTZlMjhhNzRkMGQ4YjZlYjEwOGEwZjdmMDBkIiwidXNlcl9pZCI6IjMifQ.NrvHw__Gt0rGyS1CbNZuY6XVk4SfTlgc-C6rGbwRxtk"
+}
