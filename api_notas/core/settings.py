@@ -1,5 +1,11 @@
 from pathlib import Path
 from datetime import timedelta
+import os
+
+try:
+    import dj_database_url
+except ImportError:
+    dj_database_url = None
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
@@ -63,11 +69,14 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+if dj_database_url and os.getenv('DATABASE_URL'):
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 
 
 AUTH_PASSWORD_VALIDATORS = []
