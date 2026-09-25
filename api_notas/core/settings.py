@@ -19,7 +19,7 @@ SECRET_KEY = "django-insecure-cambia-esta-clave"
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 INSTALLED_APPS = [
