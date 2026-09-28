@@ -124,3 +124,5 @@ try:
             User.objects.create_superuser('admin', 'admin@example.com', '12345678')
 except Exception:
     pass
+
+LOGIN_REDIRECT_URL = '/api/notas/'
