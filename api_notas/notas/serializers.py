@@ -1,27 +1,25 @@
 from rest_framework import serializers
-from .models import Nota
-from django.contrib.auth.models import User
+from .models import Proyecto, TipoNota, Nota
 
+class TipoNotaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TipoNota
+        fields = '__all__'
 
 class NotaSerializer(serializers.ModelSerializer):
+    tipo_nombre = serializers.ReadOnlyField(source='tipo.nombre')
 
     class Meta:
         model = Nota
-        fields = "__all__"
-        read_only_fields = ["usuario", "fecha_creacion", "fecha_actualizacion"]
+        fields = ['id', 'titulo', 'contenido', 'proyecto', 'tipo', 'tipo_nombre', 'creado_en']
 
-
-class RegisterSerializer(serializers.ModelSerializer):
+class ProyectoSerializer(serializers.ModelSerializer):
+    # Campo calculado para devolver el conteo de notas del proyecto
+    total_notas = serializers.SerializerMethodField()
 
     class Meta:
-        model = User
-        fields = ["username", "password", "email"]
+        model = Proyecto
+        fields = ['id', 'nombre', 'descripcion', 'usuario', 'total_notas', 'creado_en']
 
-    def create(self, validated_data):
-        usuario = User.objects.create_user(
-            username=validated_data["username"],
-            password=validated_data["password"],
-            email=validated_data["email"]
-        )
-
-        return usuario
+    def get_total_notas(self, obj):
+        return obj.notas.count()

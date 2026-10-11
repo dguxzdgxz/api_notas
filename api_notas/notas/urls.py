@@ -1,10 +1,12 @@
-from django.urls import path
+from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import NotaViewSet, RegisterView
+from .views import ProyectoViewSet, TipoNotaViewSet, NotaViewSet
 
 router = DefaultRouter()
-router.register("notas", NotaViewSet, basename="nota")
+router.register(r'proyectos', ProyectoViewSet, basename='proyecto')
+router.register(r'tipos', TipoNotaViewSet, basename='tiponota')
+router.register(r'notas', NotaViewSet, basename='nota')
 
 urlpatterns = [
-    path("register/", RegisterView.as_view(), name="register"),
-] + router.urls
+    path('', include(router.urls)),
+]

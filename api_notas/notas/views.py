@@ -1,59 +1,35 @@
-from rest_framework import viewsets
-from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import viewsets, permissions
+from .models import Proyecto, TipoNota, Nota
+from .serializers import ProyectoSerializer, TipoNotaSerializer, NotaSerializer
 
-from .models import Nota
-from .serializers import NotaSerializer, RegisterSerializer
+class ProyectoViewSet(viewsets.ModelViewSet):
+    serializer_class = ProyectoSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+        # El usuario solo ve sus propios proyectos
+        return Proyecto.objects.filter(usuario=self.request.user)
+
+class TipoNotaViewSet(viewsets.ModelViewSet):
+    queryset = TipoNota.objects.all()
+    serializer_class = TipoNotaSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 class NotaViewSet(viewsets.ModelViewSet):
     serializer_class = NotaSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        notas = Nota.objects.filter(usuario=self.request.user)
+        queryset = Nota.objects.filter(proyecto__usuario=self.request.user)
+        
+        # Filtrado por tipo desde URL (?tipo=1)
+        tipo_id = self.request.query_params.get('tipo')
+        if tipo_id:
+            queryset = queryset.filter(tipo_id=tipo_id)
+            
+        # Filtrado por proyecto desde URL (?proyecto=2)
+        proyecto_id = self.request.query_params.get('proyecto')
+        if proyecto_id:
+            queryset = queryset.filter(proyecto_id=proyecto_id)
 
-        buscar = self.request.query_params.get("buscar")
-
-        if buscar:
-            notas = notas.filter(
-                titulo__icontains=buscar
-            ) | notas.filter(
-                contenido__icontains=buscar
-            )
-
-        return notas.order_by("-fecha_creacion")
-
-    def perform_create(self, serializer):
-        serializer.save(usuario=self.request.user)
-
-    @action(detail=False, methods=["get"])
-    def estadisticas(self, request):
-        cantidad = Nota.objects.filter(usuario=request.user).count()
-
-        return Response({
-            "total_notas": cantidad
-        })
-
-
-class RegisterView(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        serializer = RegisterSerializer(data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-
-            return Response(
-                {"mensaje": "Usuario creado correctamente"},
-                status=status.HTTP_201_CREATED
-            )
-
-        return Response(
-            serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST
-        )
+        return queryset
