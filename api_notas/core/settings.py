@@ -66,7 +66,8 @@ TEMPLATES = [
 ]
 
 
-WSGI_APPLICATION = "core.wsgi.application"
+WSGI_APPLICATION = 'core.wsgi.application'
+ROOT_URLCONF = 'core.urls'
 
 
 DATABASES = {
